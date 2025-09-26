@@ -10,7 +10,6 @@ import ru.practicum.ewm.dto.ViewStats;
 import ru.practicum.ewm.service.StatsService;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Slf4j
