@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.ewm.enums.EventStateAction;
+import ru.practicum.ewm.enums.StateAction;
 
 import java.time.LocalDateTime;
 
@@ -32,7 +32,7 @@ public class UpdateEventAdminRequest {
 
     private Integer participantLimit;
 
-    private EventStateAction eventStateAction;
+    private StateAction stateAction;
 
     @Size(min = 3, max = 120)
     private String title;

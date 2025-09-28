@@ -14,7 +14,7 @@ import ru.practicum.ewm.dto.UpdateEventAdminRequest;
 import ru.practicum.ewm.dto.ViewStats;
 import ru.practicum.ewm.enums.EventState;
 import ru.practicum.ewm.enums.RequestStatus;
-import ru.practicum.ewm.enums.EventStateAction;
+import ru.practicum.ewm.enums.StateAction;
 import ru.practicum.ewm.exception.ValidationException;
 import ru.practicum.ewm.mapper.EventMapper;
 import ru.practicum.ewm.model.Event;
@@ -33,9 +33,9 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class AdminEventService {
-    private static final Map<EventStateAction, EventState> statusMap = Map.of(
-            EventStateAction.PUBLISH_EVENT, EventState.PUBLISHED,
-            EventStateAction.REJECT_EVENT, EventState.CANCELED
+    private static final Map<StateAction, EventState> statusMap = Map.of(
+            StateAction.PUBLISH_EVENT, EventState.PUBLISHED,
+            StateAction.REJECT_EVENT, EventState.CANCELED
     );
 
     private final EventRepository eventRepository;
@@ -122,15 +122,15 @@ public class AdminEventService {
                     HttpStatus.BAD_REQUEST);
         }
 
-        if (event.getState() == EventState.PUBLISHED && updateRequest.getEventStateAction() == EventStateAction.PUBLISH_EVENT) {
+        if (event.getState() == EventState.PUBLISHED && updateRequest.getStateAction() == StateAction.PUBLISH_EVENT) {
             throw new ValidationException("Нельзя публиковать уже опубликованное событие", HttpStatus.CONFLICT);
         }
 
-        if (event.getState() == EventState.CANCELED && updateRequest.getEventStateAction() == EventStateAction.PUBLISH_EVENT) {
+        if (event.getState() == EventState.CANCELED && updateRequest.getStateAction() == StateAction.PUBLISH_EVENT) {
             throw new ValidationException("Нельзя опубликовать отклонённое событие", HttpStatus.CONFLICT);
         }
 
-        if (event.getState() == EventState.PUBLISHED && updateRequest.getEventStateAction() == EventStateAction.REJECT_EVENT) {
+        if (event.getState() == EventState.PUBLISHED && updateRequest.getStateAction() == StateAction.REJECT_EVENT) {
             throw new ValidationException("Нельзя отклонить уже опубликованное событие.", HttpStatus.CONFLICT);
         }
 
@@ -152,7 +152,7 @@ public class AdminEventService {
         updateField(updateRequest.getPaid(), event::setPaid);
         updateField(updateRequest.getParticipantLimit(), event::setParticipantLimit);
 
-        EventState newState = Optional.ofNullable(updateRequest.getEventStateAction())
+        EventState newState = Optional.ofNullable(updateRequest.getStateAction())
                 .map(statusMap::get)
                 .orElse(event.getState());
 

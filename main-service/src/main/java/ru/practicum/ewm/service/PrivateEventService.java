@@ -130,6 +130,7 @@ public class PrivateEventService {
         List<Event> events = eventRepository.findByInitiatorId(userId, pageable);
         if (events.isEmpty()) return List.of();
 
+        // Считаем сколько заявок подтверждено
         Map<Long, Long> confirmedRequestsMap = getconfirmedRequestsMap(events);
 
         Map<String, Event> uriToEventMap = events.stream()
